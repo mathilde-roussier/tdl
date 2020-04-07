@@ -67,7 +67,7 @@ class bdd
 
 	public function update($id, $table, $column, $value)
 	{
-		$this->connexion->query("UPDATE ".$table." SET ".$column."=".$value." WHERE id=".$id);
+		$this->connexion->query("UPDATE ".$table." SET ".$column."='".$value."' WHERE id=".$id);
 	}
 }
 
