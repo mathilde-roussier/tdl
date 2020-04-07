@@ -59,11 +59,15 @@ class bdd
 		$test = $this->connexion->query($query)->fetch();
 		if(empty($test))
 		{
-			if($this->connexion->query("INSERT INTO `tablaeux`(`id`, `id_createur`, `nom`)
+			if($this->connexion->query("INSERT INTO `tableaux`(`id`, `id_createur`, `nom`)
 						   VALUES  (NULL, '".$id_createur."', '".$titre."')" ) )
 			{
 				$id = $this->connexion->query($query)->fetch()["id"];
 				echo json_encode(["titre"=>$titre, "id_createur"=>$id_createur, "id"=>$id]);
+			}
+			else
+			{
+				echo "query fail";
 			}
 		}
 	}
