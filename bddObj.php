@@ -26,7 +26,7 @@ class bdd
 
 	public function add_list($id_createur, $id_tableau, $titre)
 	{
-		$query = "SELECT * FROM taches WHERE id_createur=".$id_createur." AND id_tableau=".$id_tableau." AND nom='".$titre."'";
+		$query = "SELECT * FROM listes WHERE id_createur=".$id_createur." AND id_tableau=".$id_tableau." AND nom='".$titre."'";
 		$test = $this->connexion->query($query)->fetch();
 		if(empty($test))
 		{
@@ -70,5 +70,7 @@ class bdd
 		$this->connexion->query("UPDATE ".$table." SET ".$column."='".$value."' WHERE id=".$id);
 	}
 }
+$bd = new bdd();
 
+$bd->add_list(1,2,"chocotask");
 ?>
