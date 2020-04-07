@@ -11,14 +11,16 @@ if (!isset($_SESSION['id'])) {
 
 <head>
     <meta charset="UTF-8">
+    <script src='https://code.jquery.com/jquery-3.4.1.js'></script>
     <link rel='stylesheet' href='css/tdl.css'>
+    <script src='tdl.js'></script>
     <title> To Do List </title>
 </head>
 
-<body>
+<body class='todolist'>
 
     <header>
-        <span> Déconnexion </span>
+        <span><a href='index.php?deco'> Déconnexion</a></span>
     </header>
 
     <main>

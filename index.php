@@ -11,6 +11,10 @@ if (isset($_POST['connexion'])) {
     $user->connexion($_POST['login'], $_POST['mdp']);
 }
 
+if (isset($_GET['deco'])){
+    $user->disconnect();
+}
+
 ?>
 
 <!DOCTYPE html>
