@@ -1,5 +1,6 @@
 <?php include 'class/user.php';
 session_start();
+
 $user = new user();
 
 if (isset($_POST['inscription'])) {
@@ -8,7 +9,6 @@ if (isset($_POST['inscription'])) {
 
 if (isset($_POST['connexion'])) {
     $user->connexion($_POST['login'], $_POST['mdp']);
-    echo ($user->getlastmessage());
 }
 
 ?>
@@ -28,13 +28,19 @@ if (isset($_POST['connexion'])) {
         <aside>
             <h3> Connexion </h3>
 
-            <form action='' method='POST'>
-                <label> Login </label>
-                <input type='text' name='login' required>
-                <label> Mot de passe </label>
-                <input type='password' name='mdp' required>
-                <input type='submit' name='connexion' value='connexion'>
-            </form>
+            <div>
+                <form action='' method='POST'>
+                    <label> Login </label>
+                    <input type='text' name='login' required>
+                    <label> Mot de passe </label>
+                    <input type='password' name='mdp' required>
+                    <input type='submit' name='connexion' value='connexion'>
+                </form>
+
+                <?php if(isset($_POST['connexion'])){echo $user->getlastmessage();} ?>
+
+            </div>
+
         </aside>
 
     </header>
@@ -51,9 +57,10 @@ if (isset($_POST['connexion'])) {
             <label> Confirmation mot de passe </label>
             <input type='password' name='conf_mdp' required>
             <input type='submit' name='inscription' value='inscription'>
+
+            <?php if(isset($_POST['inscription'])){echo $user->getlastmessage();} ?>
+
         </form>
-
-
 
     </main>
 

@@ -12,8 +12,6 @@ class user
     public function __construct()
     {
         // Recup connexion bdd
-        // $this->bdd = new bdd();
-        // $this->bdd = $this->bdd->getco();
         try {
             $this->bdd = new PDO('mysql:host=localhost;dbname=tdl;charset=utf8', 'root', '');
         } catch (Exception $e) {
@@ -34,7 +32,7 @@ class user
                     $requete->execute(array(':nom' => $nom,':mdp' => $mdp));
                     $resultat = $requete->fetchAll(PDO::FETCH_ASSOC);
                 } else {
-                    $this->lastmessage = 'Ce login / mail est déjà utilisé';
+                    $this->lastmessage = 'Ce login est déjà utilisé';
                 }
             } else {
                 $this->lastmessage = 'Les deux mots de passe sont différents';
@@ -55,6 +53,8 @@ class user
                 if (password_verify($mdp, $infos["password"])) {
                     $this->id = $infos["id"];
                     $this->login = $infos["nom"];
+                    $_SESSION['id'] = $this->id;
+                    header('location:todolist.php');
                 } else {
                     $this->lastmessage = 'Erreur de mot de passe';
                 }
