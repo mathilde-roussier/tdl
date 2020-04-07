@@ -26,12 +26,13 @@ class bdd
 
 	public function add_list($id_createur, $id_tableau, $titre)
 	{
-		$test = $this->connexion->query("SELECT * FROM listes WHERE id_createur=".$id_createur." AND id_tableau=".$id_tableau." AND nom='".$titre."'")->fetch();
+		$query = "SELECT * FROM taches WHERE id_createur=".$id_createur." AND id_tableau=".$id_tableau." AND nom='".$titre."'";
+		$test = $this->connexion->query($query)->fetch();
 		if(empty($test))
 		{
 			if($this->connexion->query("INSERT INTO `listes` (`id`, `id_createur`, `id_tableau`, `nom`) VALUES (NULL, '".$id_createur."', '".$id_tableau."', '".$titre."' )" ) )
 			{
-				$id = $this->connexion->query("SELECT id FROM listes WHERE id_createur=".$id_createur." AND id_tableau=".$id_tableau." AND nom='".$titre."'")->fetch()["id"];
+				$id = $this->connexion->query($query)->fetch()["id"];
 				echo json_encode(["titre"=>$titre, "id_tableau"=>$id_tableau, "id_createur"=>$id_createur, "id"=>$id]);
 			}
 		}
@@ -39,13 +40,14 @@ class bdd
 
 	public function add_task($id_createur, $id_liste, $titre)
 	{
-		$test = $this->connexion->query("SELECT * FROM taches WHERE id_createur=".$id_createur." AND id_liste=".$id_liste." AND nom='".$titre."'")->fetch();
+		$query = "SELECT * FROM taches WHERE id_createur=".$id_createur." AND id_liste=".$id_liste." AND nom='".$titre."'";
+		$test = $this->connexion->query($query)->fetch();
 		if(empty($test))
 		{
 			if($this->connexion->query("INSERT INTO `taches`(`id`, `id_createur`, `id_liste`, `date_creation`, `finit`, `deadline`, `nom`)
 						   VALUES  (NULL, '".$id_createur."','".$id_liste."', CURRENT_DATE(), 0, CURRENT_TIMESTAMP, '".$titre."')" ) )
 			{
-				$id = $this->connexion->query("SELECT id FROM `taches` WHERE id_createur=".$id_createur." AND id_liste=".$id_liste." AND nom='".$titre."'")->fetch()["id"];
+				$id = $this->connexion->query($query)->fetch()["id"];
 				echo json_encode(["titre"=>$titre, "id_liste"=>$id_liste, "id_createur"=>$id_createur, "id"=>$id]);
 			}
 		}
@@ -63,7 +65,7 @@ class bdd
 		}
 	}
 
-	public function update_list($id, $table, $column, $value)
+	public function update($id, $table, $column, $value)
 	{
 		$this->connexion->query("UPDATE ".$table." SET ".$column."=".$value." WHERE id=".$id);
 	}
