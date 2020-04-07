@@ -11,8 +11,14 @@ class user
 
     public function __construct()
     {
-        $this->bdd = new bdd();
-        $this->bdd = $this->bdd->getco();
+        // Recup connexion bdd
+        // $this->bdd = new bdd();
+        // $this->bdd = $this->bdd->getco();
+        try {
+            $this->bdd = new PDO('mysql:host=localhost;dbname=tdl;charset=utf8', 'root', '');
+        } catch (Exception $e) {
+            die('Erreur : ' . $e->getMessage());
+        }
     }
 
     public function inscription($nom, $mdp, $confmdp)
@@ -42,15 +48,18 @@ class user
     {
         $requete = $this->bdd->prepare("SELECT * FROM user WHERE nom = :nom");
         $requete->execute(array(':nom' => $nom));
-        $resultat = $requete->fetchAll(PDO::FETCH_ASSOC);
+        $resultat = $requete->fetchAll();
         if (!empty($resultat)) {
-            if (password_verify($mdp, $resultat["password"])) {
-                $this->id = $resultat["id"];
-                $this->login = $resultat["login"];
-                header('location:todolist.php');
-            } else {
-                $this->lastmessage = 'Erreur de mot de passe';
+            foreach($resultat as $infos)
+            {
+                if (password_verify($mdp, $infos["password"])) {
+                    $this->id = $infos["id"];
+                    $this->login = $infos["nom"];
+                } else {
+                    $this->lastmessage = 'Erreur de mot de passe';
+                }
             }
+            
         } else {
             $this->lastmessage = 'Ce login n\' existe pas';
         }
@@ -69,11 +78,6 @@ class user
     public function getlogin()
     {
         return $this->login;
-    }
-
-    public function getmail()
-    {
-        return $this->mail;
     }
 
     public function getid()
