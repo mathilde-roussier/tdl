@@ -1,7 +1,4 @@
 <?php
-session_start();
-
-$_SESSION["id"] = 1;
 
 class bdd
 {
@@ -71,8 +68,5 @@ class bdd
 		$this->connexion->query("UPDATE ".$table." SET ".$column."=".$value." WHERE id=".$id);
 	}
 }
-
-$bd = new BDD();
-$bd->del(2,"3");
 
 ?>
