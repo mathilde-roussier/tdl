@@ -1,12 +1,7 @@
 <?php
 include("bdd.php");
-$_POST["function"] = "add_tableau";
-$_POST["titre"]="tastestear";
-
 
 session_start();
-
-$_SESSION["id"] = 1;
 
 if(!isset($bdd))
 {
