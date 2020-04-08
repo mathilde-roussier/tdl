@@ -55,3 +55,12 @@ html{
     display: flex;
     flex-direction: column;
 }
+
+.tableau{
+    display: flex;
+}
+
+.tableau div{
+    display: flex;
+    flex-direction: column;
+}

@@ -24,13 +24,14 @@ if (!isset($_SESSION['id'])) {
         <span><a href='index.php?deco'>Déconnexion</a></span>
     </header>
 
-    <main id='1' class='tableau'>
-
-        <div class="liste" id='1'>
+    <main>
+        <section class="tableau">
+            <div class="liste">
+                <div class="taches">
+                </div>
+            </div>
         </div>
 
-        <div class="liste" id='2'>
-        </div>
     </main>
 
 </body>
