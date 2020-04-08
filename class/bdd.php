@@ -111,13 +111,13 @@ class bdd
 
 	public function get_taches($id_createur, $id_liste, $id_tableau)
 	{
-		$query = "SELECT *, taches.nom AS tache_nom, taches.id AS tache_id FROM taches 
+		$query = "SELECT taches.nom AS nom_tache, taches.id AS id_tache, taches.id_liste AS id_liste
+		FROM taches 
 		INNER JOIN listes ON taches.id_liste = listes.id 
 		INNER JOIN tableaux ON listes.id_tableau = tableaux.id 
 		WHERE taches.id_createur=".$id_createur." AND taches.id_liste=".$id_liste." AND  listes.id_tableau=".$id_tableau;
 		$res = $this->connexion->query($query)->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode($res);
-		var_dump($res);
 		return $res;
 	}
 }

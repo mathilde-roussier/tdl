@@ -39,7 +39,7 @@ if(isset($_POST["function"])||isset($_GET["function"]))
 		break;
 
 		case "update":
-			$id = $_SESSION["id"];
+			$id = $_POST["id"];
 			$table = $_POST["table"];
 			$column = $_POST["column"];
 			$value = $_POST["value"];
