@@ -58,7 +58,7 @@ if(isset($_POST["function"])||isset($_GET["function"]))
 		break;
 
 		case "get_taches":
-			$id_createur = $_SESSION["id"];
+			$id_createur = $_POST["id_createur"];
 			$id_liste = $_POST["id_liste"];
 			$id_tableau = $_POST["id_tableau"];
 			$bdd->get_taches($id_createur, $id_liste, $id_tableau);

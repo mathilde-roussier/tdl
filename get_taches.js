@@ -1,21 +1,17 @@
 $(document).ready(function(){
-	get_tasks();
+	get_tasks(1,1,1);
 })
 
 
-function get_tasks()
+function get_tasks(id_liste, id_tableau, id_createur)
 {
-	id_tableau = $(".tableau").attr("id");
-	listes = $(".liste");
-	for(var l=0; l<listes.length; l++)
-	{
 		$.ajax({
 			url:'bdd_handler.php',
 			type:"post",
 			data:{ "function":"get_taches",
-				"id_liste":$(listes[l]).attr("id"),
+				"id_liste":id_liste,
 				"id_tableau":id_tableau,
-				"id_createur":0},
+				"id_createur":id_createur},
 			success:function(data)
 			{
 				data = JSON.parse(data);
@@ -28,7 +24,6 @@ function get_tasks()
 				task_event();
 			}
 		});
-	}
 
 }
 
@@ -87,7 +82,10 @@ function change_task_name()
 
 function move_task()
 {
-	$(".tache").on("mousedown", function(e){
-		console.log(e.clientX);	
-	});
+	console.log($(".tache"));	
+	$(".tache").click(function(e){
+		e.preventDefault();
+
+		console.log(e.clientX);
+	});	
 }
