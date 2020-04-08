@@ -12,11 +12,9 @@ class user
     public function __construct()
     {
         // Recup connexion bdd
-        // $this->bdd = new bdd();
-        // $this->bdd = $this->bdd->getco();
         try {
-            $this->bdd = new PDO('mysql:host=localhost;dbname=tdl;charset=utf8', 'root', '');
-        } catch (Exception $e) {
+            $this->bdd = new PDO('mysql:host=localhost;dbname=todolist;charset=utf8', 'root', '');
+        } catch (PDOException $e) {
             die('Erreur : ' . $e->getMessage());
         }
     }
@@ -25,16 +23,16 @@ class user
     {
         if ($nom != NULL && $mdp != NULL && $confmdp != NULL) {
             if ($mdp == $confmdp) {
-                $recup = $this->bdd->prepare("SELECT nom FROM user WHERE nom = :nom");
+                $recup = $this->bdd->prepare("SELECT nom FROM utilisateurs WHERE nom = :nom");
                 $recup->execute(array(':nom' => $nom));
                 $resultat = $recup->fetchAll(PDO::FETCH_ASSOC);
                 if (empty($resultat)) {
                     $mdp = password_hash($mdp, PASSWORD_BCRYPT, array('cost' => 12));
-                    $requete = $this->bdd->prepare("INSERT INTO user (nom, password) VALUES (:nom,:mdp)");
+                    $requete = $this->bdd->prepare("INSERT INTO utilisateurs (nom, password) VALUES (:nom,:mdp)");
                     $requete->execute(array(':nom' => $nom,':mdp' => $mdp));
                     $resultat = $requete->fetchAll(PDO::FETCH_ASSOC);
                 } else {
-                    $this->lastmessage = 'Ce login / mail est déjà utilisé';
+                    $this->lastmessage = 'Ce login est déjà utilisé';
                 }
             } else {
                 $this->lastmessage = 'Les deux mots de passe sont différents';
@@ -46,7 +44,7 @@ class user
 
     public function connexion($nom, $mdp)
     {
-        $requete = $this->bdd->prepare("SELECT * FROM user WHERE nom = :nom");
+        $requete = $this->bdd->prepare("SELECT * FROM utilisateurs WHERE nom = :nom");
         $requete->execute(array(':nom' => $nom));
         $resultat = $requete->fetchAll();
         if (!empty($resultat)) {
@@ -55,6 +53,8 @@ class user
                 if (password_verify($mdp, $infos["password"])) {
                     $this->id = $infos["id"];
                     $this->login = $infos["nom"];
+                    $_SESSION['id'] = $this->id;
+                    header('location:todolist.php');
                 } else {
                     $this->lastmessage = 'Erreur de mot de passe';
                 }
@@ -68,6 +68,7 @@ class user
     public function disconnect()
     {
         session_destroy();
+        header('location:index.php');
     }
 
     public function getlastmessage()

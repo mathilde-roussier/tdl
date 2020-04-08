@@ -1,12 +1,33 @@
+html{
+    height:100%;
+}
+
+.todolist{
+    display: flex;
+    flex-direction: column;
+    height:100%;
+}
+
+.todolist main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height:100%;
+    justify-content: center;
+}
+
 .accueil{
     display: flex;
     flex-direction: column;
+    height:100%;
 }
 
 .accueil main{
     display: flex;
     flex-direction: column;
     align-items: center;
+    height:100%;
+    justify-content: center;
 }
 
 .accueil main form{
@@ -28,4 +49,9 @@
     width:50%;
     align-items:center;
     justify-content: space-evenly;
+}
+
+.accueil header aside div{
+    display: flex;
+    flex-direction: column;
 }
