@@ -25,12 +25,13 @@ if (!isset($_SESSION['id'])) {
 
     <main>
         <section class="tableau">
-            <div class="liste">
-                <div class="taches">
-                </div>
+            <div class='newliste'>
+                <input id='addnewliste' placeholder='Ajouter une liste' type='text'>
+                <button id='addliste'>Ajouter une liste</button>
             </div>
-        </div>
-
+            <div class="taches">
+            </div>
+        </section>
 
     </main>
 

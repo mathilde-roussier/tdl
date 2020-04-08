@@ -58,9 +58,12 @@ html{
 
 .tableau{
     display: flex;
+    width: 100%;
 }
 
-.tableau div{
+.tableau .liste{
     display: flex;
     flex-direction: column;
+    border:1px solid black;
+    width: 15%;
 }

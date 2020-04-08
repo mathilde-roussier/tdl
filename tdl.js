@@ -1,5 +1,63 @@
 $(document).ready(function () {
 
+    $('#addliste').css({
+        'display': 'none',
+    })
+
+    $('#addnewliste').focus(function () {
+        $('#addliste').css({
+            'display': 'block',
+        })
+    })
+
+    add_liste();
+
+    get_liste();
+
+})
+
+
+// Function_LISTE 
+
+function add_liste() {
+
+    $('#addnewliste').keydown(function (event) {
+        if (event.keyCode == 13) {
+            $('#addliste').click();
+        }
+    });
+
+    $('#addliste').click(function () {
+        var titre = $('#addnewliste').val();
+        if (titre != '') {
+            $.ajax({
+                method: "POST",
+                url: "bdd_handler.php",
+                data: { 'function': 'add_list', 'id_tableau': '1', 'titre': titre }, //modifier 1 par $_GET['id_tableau];
+                datatype: "json",
+            })
+
+        }
+        $('#addliste').css({
+            'display': 'none',
+        })
+        $('#addnewliste').val('');
+        $('.liste').remove();
+        get_liste();
+    })
+}
+
+function modif_nomliste(id, value) {
+    $.ajax({
+        method: "POST",
+        url: "bdd_handler.php",
+        data: { 'function': 'update', 'id': id, 'table': 'listes', 'column': 'nom', 'value': value },
+        datatype: "json",
+    })
+}
+
+function get_liste() {
+
     $.ajax({
         method: "POST",
         url: "bdd_handler.php",
@@ -8,11 +66,9 @@ $(document).ready(function () {
         success: function (datatype) {
 
             var liste = JSON.parse(datatype);
-            console.log(liste[0]['id']);
 
             for (var i = 0; i < liste.length; i++) {
-
-                $('.tableau').append('<div class=liste id=' + liste[i]['id'] + '><textarea id=nom' + liste[i]['id'] + '>' + liste[i]['nom'] + '</textarea></div>');
+                $('.tableau').append('<div class="liste" id=' + liste[i]['id'] + '><textarea id=nom' + liste[i]['id'] + '>' + liste[i]['nom'] + '</textarea></div>');
                 $('textarea').css({
                     'border': 'none',
                     'resize': 'none',
@@ -37,20 +93,10 @@ $(document).ready(function () {
 
             $('textarea').keyup(function () {
                 var value = $(this).val();
-                modif_nomliste(value);
+                var id = $(this).parent().attr('id');
+                modif_nomliste(id, value);
             })
         }
 
-    })
-
-})
-
-
-function modif_nomliste(value) {
-    $.ajax({
-        method: "POST",
-        url: "bdd_handler.php",
-        data: { 'function': 'update', 'table': 'listes', 'column': 'nom', 'value': value },
-        datatype: "json",
     })
 }
