@@ -24,11 +24,13 @@ if (!isset($_SESSION['id'])) {
     </header>
 
     <main>
-
-        <div class="liste">
-            <div class="taches">
+        <section class="tableau">
+            <div class="liste">
+                <div class="taches">
+                </div>
             </div>
         </div>
+
 
     </main>
 
