@@ -1,5 +1,6 @@
 $(document).ready(function(){
 	get_tasks(1,1,1);
+	get_tasks(2,1,1);
 })
 
 
@@ -21,7 +22,6 @@ function get_tasks(id_liste, id_tableau, id_createur)
 					display_task(data[i]);
 				}
 				
-				task_event();
 			}
 		});
 
@@ -29,63 +29,59 @@ function get_tasks(id_liste, id_tableau, id_createur)
 
 function display_task(task)
 {
-	tache = "<div class='tache' id='"+task["id_tache"]+"'><p>"+
-	task["nom_tache"]+"</p></div>";
+	tache = "<div class='tache' id='"+task["id_tache"]+"'><p class='task_title'>"+
+	task["nom_tache"]+"</p><u>"+task["createur"]+"</div>";
 	$(".liste[id$="+task["id_liste"]+"]").append(tache);
 }
 
+var on_title = false;
+var task_nom;
+$(document).click(function(e){
+	target = $(e.target);
 
-function task_event()
+	if(on_title == true)
+	{
+		console.log(task_nom);
+		nom =  ($("#task_name_input").val().length > 0) ? $("#task_name_input").val() :task_nom  ;  
+		console.log($("#task_name_input").val().length, nom);
+		$("#task_name_input").parent().prepend("<p class='task_title'>"+nom+"</p>");
+		$("#task_name_input").remove();
+		change_task_title(nom,$($("#task_name_input").parent()).attr("id"));
+		on_title = false;
+	}
+	
+	if(target.attr("class") == "tache")
+	{
+		console.log("tache clicked");
+		on_title = false;
+	}
+	else if(target.attr("class") == 'task_title')
+	{
+		tache = target.parent();
+		task_nom = target.text();
+		input = $("<input type='text' placeholder='"+target.text()+"' id='task_name_input'/>");
+		tache.prepend(input);
+		target.remove();
+		input.focus();
+
+		on_title = true;
+	}
+});
+
+function change_task_title(title, task_id)
 {
-	change_task_name();
-	move_task();
-}
-
-function change_task_name()
-{
-	// Si on clique sur le nom de la tache
-	$(".tache p").click(function(e){
-		// On remplace le nom par un input text
-		nom = $(this).text();
-		$(this).parent().append("<input type='text' value='"+nom+"' id='tache-change-name'/>");
-		$(this).remove();
-		
-		// Quand notre focus est sur l'input
-		$("#tache-change-name").on("focus", function(){
-			// Si on appuie sur <Enter>
-			$("#tache-change-name").keypress(function(e){
-				if(e.keyCode == 13)
-				{
-					new_name = $("#tache-change-name").val();
-					id_parent = $("#tache-change-name").parent().attr("id");
-
-					// On met a jout la bdd tache avec le nouveau nom
-					$.ajax({
-						url:"bdd_handler.php",
-						type:'POST',
-						data:{"function":"update",
-						"table":"taches", "column":"nom", "value":new_name,
-						"id":id_parent},
-						success:function(data)
-							{
-								// On supprime l'input et on remet le nom
-								$(".tache[id$="+id_parent+"]").append("<p>"+new_name+"</p>");
-								$("#tache-change-name").remove();
-							}
-						});
-					}		
-				});
-		});
+console.log(title, task_id);
+	$.ajax({
+		type:"post",
+		url:"bdd_handler.php",
+		data:{	"function":"update",
+			"table":"taches",
+			"column":"nom",
+			"value":title,
+			"id":task_id},
+		success:function(data)
+		{
+			console.log("win");
+		}
 	});
-}
-
-
-function move_task()
-{
-	console.log($(".tache"));	
-	$(".tache").click(function(e){
-		e.preventDefault();
-
-		console.log(e.clientX);
-	});	
 }

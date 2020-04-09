@@ -28,6 +28,9 @@ if (!isset($_SESSION['id'])) {
         <section class="tableau" id='1'>
             <div class="liste" id='1'>
             </div>
+            
+	    <div class="liste" id='2'>
+            </div>
         </div>
 
     </main>
