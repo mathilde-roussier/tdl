@@ -56,14 +56,16 @@ html{
     flex-direction: column;
 }
 
-.tableau{
+
+.tableau_actuel, .liste_tableaux{
     display: flex;
     width: 100%;
 }
 
-.tableau .liste{
+.tableau_actuel .liste, .liste_tableaux .tableau{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
     border:1px solid black;
     width: 15%;
 }

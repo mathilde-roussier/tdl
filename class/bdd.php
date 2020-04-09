@@ -55,7 +55,7 @@ class bdd
 
 	public function add_tableau($id_createur, $titre)
 	{
-		$query = "SELECT * FROM taches WHERE id_createur=".$id_createur." AND nom='".$titre."'";
+		$query = "SELECT * FROM tableaux WHERE id_createur=".$id_createur." AND nom='".$titre."'";
 		$test = $this->connexion->query($query)->fetch();
 		if(empty($test))
 		{
