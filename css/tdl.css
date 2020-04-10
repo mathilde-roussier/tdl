@@ -2,6 +2,20 @@ html{
     height:100%;
 }
 
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height:7%;
+}
+
+.deco{
+    display:flex;
+    align-items: center;
+    width:20%;
+    justify-content: space-between;
+}
+
 .todolist{
     display: flex;
     flex-direction: column;

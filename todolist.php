@@ -20,7 +20,11 @@ if (!isset($_SESSION['id'])) {
 <body class='todolist'>
 
     <header>
-        <span><a href='index.php?deco'> Déconnexion</a></span>
+        <p class="retour_tableau"> Retour tableaux </p>
+        <div class="deco">
+            <h3 class="nom_tableau_actuel"></h3>
+            <span><a href='index.php?deco'> Déconnexion</a></span>
+        </div>
     </header>
 
     <main>

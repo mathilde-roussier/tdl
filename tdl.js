@@ -2,6 +2,10 @@ $(document).ready(function () {
 
     $('.tableau_actuel').hide();
 
+    $('.retour_tableau').hide();
+
+    $('.nom_tableau_actuel').hide();
+
     $('#addtableau').hide();
     $('#addliste').hide();
 
@@ -72,20 +76,30 @@ function get_tableau() {
             console.log(tableau);
 
             for (var i = 0; i < tableau.length; i++) {
-                var tab = '<div class="tableau" id=' + tableau[i]["id"] + '><p>' + tableau[i]["nom"] + '</p></div>';
+                var tab = '<div class="tableau" id=' + tableau[i]["id"] + '><p class="tab">' + tableau[i]["nom"] + '</p></div>';
                 $('.liste_tableaux').append(tab);
             }
 
-            $('p').click(function () {
+            $('.tab').click(function () {
                 $('.tableau_actuel').show();
                 $('.liste_tableaux').hide();
                 var id_tab = $(this).parent().attr('id');
                 localStorage.setItem('id_tableau', id_tab);
+                console.log(localStorage.getItem('id_tableau'));
 
                 add_liste(localStorage.getItem('id_tableau'));
 
                 get_liste(localStorage.getItem('id_tableau'));
+
+                $(".nom_tableau_actuel").append(tableau[localStorage.getItem('id_tableau')-1]['nom']);
+
+                $(".retour_tableau").show();
+
+                $('.nom_tableau_actuel').show();
+
             })
+
+            back_tab();
         }
     });
 
@@ -95,11 +109,12 @@ function get_tableau() {
 
 /* Ajouter une nouvelle liste */
 
-function add_liste(id_tab) {
+function add_liste(idtab) {
     $('#addnewliste').keyup(function (event) {
         if (event.keyCode == 13) {
             $('#addliste').click();
             $('#addnewliste').blur();
+            console.log(idtab);
         }
     });
 
@@ -109,7 +124,7 @@ function add_liste(id_tab) {
             $.ajax({
                 method: "POST",
                 url: "bdd_handler.php",
-                data: { 'function': 'add_list', 'id_tableau': id_tab, 'titre': titre },
+                data: { 'function': 'add_list', 'id_tableau': idtab, 'titre': titre },
                 datatype: "json",
             })
 
@@ -118,8 +133,7 @@ function add_liste(id_tab) {
             'display': 'none',
         })
         $('#addnewliste').val('');
-        $('.liste').remove();
-        get_liste(id_tab);
+        get_liste(idtab);
     })
 
 }
@@ -137,17 +151,17 @@ function modif_nomliste(id, value) {
 
 /* Afficher les listes du tableau en cours */
 
-function get_liste(id_tab) {
-
+function get_liste(idtab) {  
     $.ajax({
         method: "POST",
         url: "bdd_handler.php",
-        data: { 'function': 'get_listes', 'id_tableau': id_tab },
+        data: { 'function': 'get_listes', 'id_tableau': idtab },
         datatype: "json",
         success: function (datatype) {
 
+            $('.liste').remove();
+
             var liste = JSON.parse(datatype);
-            console.log(datatype);
 
             for (var i = 0; i < liste.length; i++) {
                 var list = '<div class="liste" id=' + liste[i]["id"] + '><textarea id=nom' + liste[i]["id"] + '>' + liste[i]["nom"] + '</textarea><span class="suppr">Del</span></div>';
@@ -180,7 +194,7 @@ function get_liste(id_tab) {
                 modif_nomliste(id, value);
             })
 
-            del_liste(id_tab);
+            del_liste(idtab);
         }
 
     })
@@ -189,7 +203,7 @@ function get_liste(id_tab) {
 
 /* Supprimer une liste */
 
-function del_liste(id_tab) {
+function del_liste(idtab) {
     $('.suppr').click(function () {
         var id_liste = $(this).parent().attr('id');
         $.ajax({
@@ -198,8 +212,19 @@ function del_liste(id_tab) {
             data: { 'function': 'del', 'id': id_liste, 'type': '1' },
             datatype: "json",
         })
-        $('.liste').remove();
-        get_liste(id_tab);
+        get_liste(idtab);
     })
 
+}
+
+// Function autres 
+
+function back_tab() {
+    $('.retour_tableau').click(function () {
+        $('.tableau_actuel').hide();
+        $('.liste_tableaux').show();
+        $('.retour_tableau').hide();
+        $('.nom_tableau_actuel').hide();
+        $('.nom_tableau_actuel').html("");
+    })
 }
