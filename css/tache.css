@@ -28,10 +28,46 @@
 	cursor:pointer;
 }
 
-
-#tache-change-name
+.top-tache
 {
-	width:80%;
+        display:flex;
+        justify-content:space-between;
+        align-self:flex-start;
+        height:fit-content;
+        width:90%;
+        padding:3px;
+}
+
+.top-tache p
+{
+        margin:0px;
+}
+
+#task_name_input
+{
+	width:60%;
 	margin-top:0.3em;
 	margin-bottom:0.3em;
+}
+
+#task-infos div
+{
+	width:2em;
+	height:2em;
+	display:flex;
+	justify-self:flex-end;
+	align-self:center;
+}
+
+#task-infos span
+{
+	width:100%;
+	align-self:center;
+	display:flex;
+	justify-content:space-between;
+}
+
+#states0
+{
+	background:red;
 }

@@ -3,6 +3,7 @@ $(document).ready(function(){
 	get_tasks(2,1,1);
 })
 
+
 function get_tasks(id_liste, id_tableau, id_createur)
 {
 		$.ajax({
@@ -28,15 +29,17 @@ function get_tasks(id_liste, id_tableau, id_createur)
 
 function display_task(task)
 {
-	tache = "<div class='tache' id='"+task["id_tache"]+"'><p class='task_title'>"+
-	task["nom_tache"]+"</p><u>"+task["createur"]+"</div>";
+	tache = "<div class='tache' id='"+task["id_tache"]+"'><span class='top-tache'><p class='task_title'>"+
+	task["nom_tache"]+"</p><u>"+task["createur"]+"</span></div>";
 	$(".liste[id$="+task["id_liste"]+"]").prepend(tache);
 }
 
 var on_title = false;
 var on_create = false;
+var on_task = 0;
 var task_nom;
-$(document).click(function(e){
+$(document).click(function(e)
+{
 	target = $(e.target);
 
 	if(on_title == true)
@@ -54,7 +57,6 @@ $(document).click(function(e){
                     on_title = false;
                 }
 	}
-	
         if(on_create == true)
 	{
                 if(target.attr("id") != 'new_task_name')
@@ -72,12 +74,7 @@ $(document).click(function(e){
                 }
 	}
 	
-	if(target.attr("class") == "tache")
-	{
-		console.log("tache clicked");
-		on_title = false;
-	}
-	else if(target.attr("class") == 'task_title')
+	if(target.attr("class") == 'task_title')
 	{
 		tache = target.parent();
 		task_nom = target.text();
@@ -131,7 +128,38 @@ $(document).click(function(e){
                     on_create = false;
                 }
            });
-       }
+        }
+        else if(target.attr("class") == "tache" ||target.parent().attr("class") == "tache" ||target.parent().parent().attr("class") == "tache")
+	{
+                target = (target.attr("class") == "tache") ? target : ((target.parent().attr('class') == 'tache') ? target.parent() : target.parent().parent());
+                id_parent = target.attr('id');
+
+                if(on_task != 0)
+                {
+                    if(id_parent != on_task)
+                    {
+                        $('.tache[id$='+on_task+']').css('height','fit-content');
+			$('#task-infos').remove();
+
+                        target.css('height','70px');
+                        on_task = id_parent;
+                        show_task_infos(on_task, target);
+                    }
+                    else
+                    {
+                        target.css('height','fit-content');
+			$('#task-infos').remove();
+                        on_task = 0;
+                    }
+                }
+                else
+                {
+                    target.css('height','70px');
+                    on_task = target.attr('id');
+		    show_task_infos(on_task, target);
+                }
+                on_create = false;
+	}
 });
 
 function change_task_title(title, task_id)
@@ -160,6 +188,22 @@ function add_task(nom,id_liste)
                 {
                         data = JSON.parse(data);
                         display_task(data);
+                }
+        });
+}
+
+function show_task_infos(id_task, task)
+{
+        $.ajax({
+                url:'bdd_handler.php',
+                type:'post',
+                data:{"function":'get_tache',
+                      'id':id_task},
+                success: function(data){
+                        data = JSON.parse(data);
+			console.log(data);
+                        infos = "<div id='task-infos'><span><p id='deadline'>"+data["deadline"]+"</p><div id='states"+data["finit"]+"'></span></div>";
+                        target.append(infos);
                 }
         });
 }
