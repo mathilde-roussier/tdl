@@ -127,6 +127,12 @@ class bdd
 		echo json_encode($res);
 		return $res;
 	}
+
+        public function get_tache($id)
+        {
+                $query = "SELECT * FROM taches WHERE id = ".$id;
+                echo json_encode($this->connexion->query($query)->fetch(PDO::FETCH_ASSOC));
+        }
 }
 
 ?>

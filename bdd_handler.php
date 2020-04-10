@@ -64,6 +64,11 @@ if(isset($_POST["function"])||isset($_GET["function"]))
 			$bdd->get_taches($id_createur, $id_liste, $id_tableau);
 		break;
 		
+                case "get_tache":
+                        $id = $_POST["id"];
+                        $bdd->get_tache($id);
+                break;
+
 		default:
 			echo "error function ".$function." not found!";
 		break;
