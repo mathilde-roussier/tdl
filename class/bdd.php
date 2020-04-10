@@ -48,7 +48,7 @@ class bdd
 						   VALUES  (NULL, '".$id_createur."','".$id_liste."', CURRENT_DATE(), 0, CURRENT_TIMESTAMP, '".$titre."')" ) )
 			{
 				$id = $this->connexion->query($query)->fetch()["id"];
-				echo json_encode(["titre"=>$titre, "id_liste"=>$id_liste, "id_createur"=>$id_createur, "id"=>$id]);
+				echo json_encode(["nom_tache"=>$titre, "id_liste"=>$id_liste, "id_createur"=>$id_createur, "id_tache"=>$id]);
 			}
 		}
 	}
