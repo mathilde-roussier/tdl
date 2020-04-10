@@ -40,15 +40,20 @@ class bdd
 
 	public function add_task($id_createur, $id_liste, $titre)
 	{
-		$query = "SELECT * FROM taches WHERE id_createur=".$id_createur." AND id_liste=".$id_liste." AND nom='".$titre."'";
-		$test = $this->connexion->query($query)->fetch();
+		$query = "SELECT  taches.id as id_tache,
+                utilisateurs.nom as nom_createur FROM taches 
+                INNER JOIN utilisateurs ON taches.id_createur = utilisateurs.id 
+                WHERE taches.id_createur=".$id_createur." AND 
+                taches.id_liste=".$id_liste."
+                AND taches.nom='".$titre."'";
+		$test = $this->connexion->query($query)->fetch(PDO::FETCH_ASSOC);
 		if(empty($test))
 		{
 			if($this->connexion->query("INSERT INTO `taches`(`id`, `id_createur`, `id_liste`, `date_creation`, `finit`, `deadline`, `nom`)
 						   VALUES  (NULL, '".$id_createur."','".$id_liste."', CURRENT_DATE(), 0, CURRENT_TIMESTAMP, '".$titre."')" ) )
 			{
-				$id = $this->connexion->query($query)->fetch()["id"];
-				echo json_encode(["nom_tache"=>$titre, "id_liste"=>$id_liste, "id_createur"=>$id_createur, "id_tache"=>$id]);
+				$data = $this->connexion->query($query)->fetch();
+				echo json_encode(["nom_tache"=>$titre, "id_liste"=>$id_liste, "id_createur"=>$id_createur, "createur"=>$data["nom_createur"], "id_tache"=>$data["id_tache"]]);
 			}
 		}
 	}
