@@ -85,17 +85,16 @@ function get_tableau() {
                 $('.liste_tableaux').hide();
                 var id_tab = $(this).parent().attr('id');
                 localStorage.setItem('id_tableau', id_tab);
-                console.log(localStorage.getItem('id_tableau'));
 
-                add_liste(localStorage.getItem('id_tableau'));
-
-                get_liste(localStorage.getItem('id_tableau'));
-
-                $(".nom_tableau_actuel").append(tableau[localStorage.getItem('id_tableau')-1]['nom']);
+                $(".nom_tableau_actuel").append($(this).html());
 
                 $(".retour_tableau").show();
 
                 $('.nom_tableau_actuel').show();
+
+                add_liste();
+
+                get_liste();
 
             })
 
@@ -109,12 +108,11 @@ function get_tableau() {
 
 /* Ajouter une nouvelle liste */
 
-function add_liste(idtab) {
+function add_liste() {
     $('#addnewliste').keyup(function (event) {
         if (event.keyCode == 13) {
             $('#addliste').click();
             $('#addnewliste').blur();
-            console.log(idtab);
         }
     });
 
@@ -124,7 +122,7 @@ function add_liste(idtab) {
             $.ajax({
                 method: "POST",
                 url: "bdd_handler.php",
-                data: { 'function': 'add_list', 'id_tableau': idtab, 'titre': titre },
+                data: { 'function': 'add_list', 'id_tableau': localStorage.getItem('id_tableau'), 'titre': titre },
                 datatype: "json",
             })
 
@@ -133,7 +131,7 @@ function add_liste(idtab) {
             'display': 'none',
         })
         $('#addnewliste').val('');
-        get_liste(idtab);
+        get_liste();
     })
 
 }
@@ -151,11 +149,11 @@ function modif_nomliste(id, value) {
 
 /* Afficher les listes du tableau en cours */
 
-function get_liste(idtab) {  
+function get_liste() {
     $.ajax({
         method: "POST",
         url: "bdd_handler.php",
-        data: { 'function': 'get_listes', 'id_tableau': idtab },
+        data: { 'function': 'get_listes', 'id_tableau': localStorage.getItem('id_tableau') },
         datatype: "json",
         success: function (datatype) {
 
@@ -194,7 +192,7 @@ function get_liste(idtab) {
                 modif_nomliste(id, value);
             })
 
-            del_liste(idtab);
+            del_liste();
         }
 
     })
@@ -203,7 +201,7 @@ function get_liste(idtab) {
 
 /* Supprimer une liste */
 
-function del_liste(idtab) {
+function del_liste() {
     $('.suppr').click(function () {
         var id_liste = $(this).parent().attr('id');
         $.ajax({
@@ -212,7 +210,7 @@ function del_liste(idtab) {
             data: { 'function': 'del', 'id': id_liste, 'type': '1' },
             datatype: "json",
         })
-        get_liste(idtab);
+        get_liste();
     })
 
 }
