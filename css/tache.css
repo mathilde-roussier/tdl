@@ -1,9 +1,8 @@
 .liste
 {
 	width:13em;
-	min-height:5em;
 	background:#e4d8d0;
-
+	height:fit-content;
 	display:flex;
 	flex-direction:column;
 	justify-content:flex-start;
@@ -17,7 +16,6 @@
 .tache
 {
 	width:10em;
-	min-height:2em;
 	background:#e8d8b9;
 
 	display:flex;

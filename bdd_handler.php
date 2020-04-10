@@ -23,7 +23,7 @@ if(isset($_POST["function"])||isset($_GET["function"]))
 		
 		case "add_task":
 			$id_createur = $_SESSION["id"];
-			$id_liste = $_POST["id_liste"];
+                        $id_liste = $_POST["id_liste"];
 			$titre = htmlspecialchars($_POST["titre"]);
 			$bdd->add_task($id_createur, $id_liste, $titre);
 		break;
@@ -43,7 +43,6 @@ if(isset($_POST["function"])||isset($_GET["function"]))
 			$table = $_POST["table"];
 			$column = $_POST["column"];
 			$value = $_POST["value"];
-			$id = $_POST["id"];
 			$bdd->update($id,$table,$column,$value, $id);
 		break;
 
