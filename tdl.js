@@ -75,9 +75,10 @@ function get_tableau() {
             $('.tableau').remove();
 
             var tableau = JSON.parse(datatype);
+            console.log(tableau);
 
             for (var i = 0; i < tableau.length; i++) {
-                var tab = '<div class="tableau" id=' + tableau[i]["id"] + '><p class="tab">' + tableau[i]["nom"] + '</p><span title="supprimer le tableau" class="suppr_tab">X</span></div>';
+                var tab = '<div class="tableau" id=' + tableau[i]["id_tableau"] + '><p class="tab">' + tableau[i]["nom"] + '</p><span title="supprimer le tableau" class="suppr_tab">X</span></div>';
                 $('.liste_tableaux').append(tab);
             }
 
@@ -90,6 +91,8 @@ function get_tableau() {
                 $('.liste_tableaux').hide();
                 var id_tab = $(this).parent().attr('id');
                 localStorage.setItem('id_tableau', id_tab);
+
+                console.log(localStorage);
 
                 $(".nom_tableau_actuel").append($(this).html());
 
@@ -115,6 +118,7 @@ function get_tableau() {
 function del_tab() {
     $('.suppr_tab').click(function () {
         var id_tableau = $(this).parent().attr('id');
+        console.log(id_tableau);
         $.ajax({
             method: "POST",
             url: "bdd_handler.php",
@@ -146,6 +150,9 @@ function add_liste() {
                 url: "bdd_handler.php",
                 data: { 'function': 'add_list', 'id_tableau': localStorage.getItem('id_tableau'), 'titre': titre },
                 datatype: "json",
+                success:function(data){
+                    console.log(data);
+                }
             })
 
         }
@@ -164,7 +171,7 @@ function modif_nomliste(id, value) {
     $.ajax({
         method: "POST",
         url: "bdd_handler.php",
-        data: { 'function': 'update', 'id': id, 'table': 'listes', 'column': 'nom', 'value': value },
+        data: { 'function': 'update', 'type': '1','id': id, 'table': 'listes', 'column': 'nom', 'value': value },
         datatype: "json",
     })
 }
@@ -179,19 +186,15 @@ function get_liste() {
         datatype: "json",
         success: function (datatype) {
 
+            console.log(datatype);
+
             $('.liste').remove();
 
             var liste = JSON.parse(datatype);
 
             for (var i = 0; i < liste.length; i++) {
-                var list = '<div class="liste" id=' + liste[i]["id"] + '><div class="titre_liste"><input id=nom' + liste[i]["id"] + ' name="nom_liste" type="text" value="'+liste[i]["nom"]+'"><span title="supprimer la liste" class="suppr_liste">X</span></div></div>';
+                var list = '<div class="liste" id=' + liste[i]["id_liste"] + '><div class="titre_liste"><input id=nom' + liste[i]["id_liste"] + ' name="nom_liste" type="text" value="'+liste[i]["nom"]+'"><span title="supprimer la liste" class="suppr_liste">X</span></div></div>';
                 $('.tableau_actuel').append(list);
-                $('input[name=nom_liste]').css({
-                    'border': 'none',
-                    'resize': 'none',
-                    'cursor': 'pointer',
-                    'outline': 'none',
-                });
             }
 
             $('input[name=nom_liste]').focus(function () {
@@ -227,7 +230,8 @@ function get_liste() {
 
 function del_liste() {
     $('.suppr_liste').click(function () {
-        var id_liste = $(this).parent().attr('id');
+        var id_liste = $(this).parent().parent().attr('id');
+        console.log(id_liste);
         $.ajax({
             method: "POST",
             url: "bdd_handler.php",

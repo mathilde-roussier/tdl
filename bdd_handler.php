@@ -43,7 +43,8 @@ if(isset($_POST["function"])||isset($_GET["function"]))
 			$table = $_POST["table"];
 			$column = $_POST["column"];
 			$value = $_POST["value"];
-			$bdd->update($id,$table,$column,$value);
+			$type = $_POST["type"];
+			$bdd->update($type, $id,$table,$column,$value);
 		break;
 
 		case "get_tableau":
