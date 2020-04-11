@@ -1,6 +1,7 @@
 $(document).ready(function(){
 	get_tasks(1,1,1);
 	get_tasks(2,1,1);
+	get_finished_tasks(1);
 })
 
 
@@ -227,14 +228,49 @@ function delete_task(id_task)
 	});
 }
 
+function get_finished_tasks(id_tableau)
+{
+	$.ajax({
+		url:"bdd_handler.php",
+		type:"post",
+		data:{"function":"get_finished_taches", "id_tableau":id_tableau},
+		success:function(data){
+			data = JSON.parse(data);
+			console.log(data);
+			for(i=0;i<data.length;i++)
+			{
+				$("#liste_tachefinit").prepend("<div class='tache_finit'>"+data[i]["nom"]+" finit le:"+data[i]["deadline"]+"</div>");	
+			}
+		}
+	});
+}
+
 function validate_task(id_task)
 {
+	var task;
 	$.ajax({
 		type:"post",
 		url:"bdd_handler",
 		data:{"function":"update", "table":"taches","column":"finit", "value":"1", "id":id_task},
 		success: function(data){
-			console.log("terminé");
+			task = $(".tache[id$="+id_task+"]");
+			$(".tache[id$="+id_task+"]").remove();
+			task.attr('class', "tache_finit");
+		}
+	});
+	$.ajax({
+		type:"post",
+		url:"bdd_handler",
+		data:{"function":"update", "table":"taches","column":"deadline", "value":"CURRENT_DATE()", "id":id_task}
+	});
+	$.ajax({
+		type:"post",
+		url:"bdd_handler.php",
+		data:{"function":"get_tache", "id":id_task},
+		success:function(data){
+			data = JSON.parse(data);
+			console.log(data);
+			$("#liste_tachefinit").prepend("<div class='tache_finit'>"+data["nom"]+" finit le:"+data["deadline"]+"</div>");	
 		}
 	});
 }

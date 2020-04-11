@@ -31,6 +31,8 @@ if (!isset($_SESSION['id'])) {
             
 	    <div class="liste" id='2'>
             </div>
+	    <div class="liste" id='liste_tachefinit'>
+            </div>
         </div>
 
     </main>
