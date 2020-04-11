@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 07, 2020 at 11:56 AM
+-- Generation Time: Apr 11, 2020 at 05:27 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.18
 
@@ -62,7 +62,14 @@ CREATE TABLE IF NOT EXISTS `tableaux` (
   `id_createur` int(11) NOT NULL,
   `nom` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tableaux`
+--
+
+INSERT INTO `tableaux` (`id`, `id_createur`, `nom`) VALUES
+(1, 1, 'tabtest');
 
 -- --------------------------------------------------------
 
@@ -77,19 +84,33 @@ CREATE TABLE IF NOT EXISTS `taches` (
   `id_liste` int(11) NOT NULL,
   `date_creation` date NOT NULL,
   `finit` tinyint(1) NOT NULL,
-  `deadline` date NOT NULL,
+  `deadline` date DEFAULT NULL,
   `nom` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `taches`
 --
 
 INSERT INTO `taches` (`id`, `id_createur`, `id_liste`, `date_creation`, `finit`, `deadline`, `nom`) VALUES
-(1, 1, 1, '2020-04-07', 0, '2020-04-07', 'test'),
-(2, 1, 1, '2020-04-07', 0, '2020-04-07', 'task1'),
-(4, 1, 1, '2020-04-07', 0, '2020-04-07', 'task3');
+(1, 1, 1, '2020-04-07', 0, NULL, 'test'),
+(2, 1, 1, '2020-04-07', 0, NULL, 'task1'),
+(4, 1, 1, '2020-04-07', 1, NULL, 'task3'),
+(5, 1, 1, '2020-04-11', 1, NULL, 'Je bug pas'),
+(12, 1, 2, '2020-04-11', 1, NULL, 'Je bug plus'),
+(7, 1, 1, '2020-04-11', 0, NULL, 'testache'),
+(8, 1, 1, '2020-04-11', 1, NULL, 'chocotache'),
+(9, 1, 1, '2020-04-11', 0, NULL, 'adwdawa'),
+(10, 1, 1, '2020-04-11', 1, NULL, 'asdadawa'),
+(11, 1, 1, '2020-04-11', 0, NULL, 'adawdwad'),
+(13, 1, 2, '2020-04-11', 1, NULL, 'presque plus'),
+(14, 1, 2, '2020-04-11', 1, NULL, 'Quasi plus'),
+(15, 1, 2, '2020-04-11', 1, NULL, 'adwda'),
+(16, 1, 2, '2020-04-11', 1, NULL, 'skdskdka'),
+(17, 1, 2, '2020-04-11', 1, NULL, 'asdwadad'),
+(18, 1, 2, '2020-04-11', 1, NULL, 'adwdasdawdas'),
+(20, 1, 2, '2020-04-11', 0, NULL, 'Nouvelle tache bis');
 
 -- --------------------------------------------------------
 
@@ -103,7 +124,14 @@ CREATE TABLE IF NOT EXISTS `utilisateurs` (
   `nom` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `utilisateurs`
+--
+
+INSERT INTO `utilisateurs` (`id`, `nom`, `password`) VALUES
+(1, 'admin', '$2y$12$MORUkKfMvIko/380Om6vWuQ3IYBIOCNyVUn0A8/twR8H4g49GVXka');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
