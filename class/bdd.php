@@ -117,7 +117,7 @@ class bdd
 	public function get_taches($id_createur, $id_liste, $id_tableau)
 	{
 		$query = "SELECT taches.nom AS nom_tache, taches.id AS id_tache, taches.id_liste AS id_liste,
-		utilisateurs.nom AS createur
+		utilisateurs.nom AS createur, taches.date_creation as date_creation
 		FROM taches 
 		INNER JOIN listes ON taches.id_liste = listes.id 
 		INNER JOIN tableaux ON listes.id_tableau = tableaux.id 

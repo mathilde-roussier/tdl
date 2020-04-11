@@ -16,7 +16,6 @@ function get_tasks(id_liste, id_tableau, id_createur)
 			success:function(data)
 			{
 				data = JSON.parse(data);
-					
 				for(var i=0;i<data.length;i++)
 				{
 					display_task(data[i]);
@@ -30,7 +29,7 @@ function get_tasks(id_liste, id_tableau, id_createur)
 function display_task(task)
 {
 	tache = "<div class='tache' id='"+task["id_tache"]+"'><span class='top-tache'><p class='task_title'>"+
-	task["nom_tache"]+"</p><u>"+task["createur"]+"</span></div>";
+	task["nom_tache"]+"</p><u>"+task["date_creation"]+"</span></div>";
 	$(".liste[id$="+task["id_liste"]+"]").prepend(tache);
 }
 
@@ -141,7 +140,6 @@ $(document).click(function(e)
                         $('.tache[id$='+on_task+']').css('height','fit-content');
 			$('#task-infos').remove();
 
-                        target.css('height','70px');
                         on_task = id_parent;
                         show_task_infos(on_task, target);
                     }
@@ -154,7 +152,6 @@ $(document).click(function(e)
                 }
                 else
                 {
-                    target.css('height','70px');
                     on_task = target.attr('id');
 		    show_task_infos(on_task, target);
                 }
@@ -201,9 +198,43 @@ function show_task_infos(id_task, task)
                       'id':id_task},
                 success: function(data){
                         data = JSON.parse(data);
-			console.log(data);
-                        infos = "<div id='task-infos'><span><p id='deadline'>"+data["deadline"]+"</p><div id='states"+data["finit"]+"'></span></div>";
-                        target.append(infos);
+                        infos = "<div id='task-infos'><span><p id='deadline'>"+data["deadline"]+"</p><div ><img id='valider' src='terminer.png'/></div><div ><img id='turnoff' src='annuler.png'/></div></span></div>";
+                        task.append(infos);
+			task.css('height','70px');
+
+			$('#turnoff').click(function(e){
+				task_id = $(this).parent().parent().parent().parent().attr("id");
+				delete_task(task_id);
+			});
+
+			$('#valider').click(function(e){
+				task_id = $(this).parent().parent().parent().parent().attr("id");
+				validate_task(task_id);
+			});
                 }
         });
+}
+
+function delete_task(id_task)
+{
+	$.ajax({
+		type:"post",
+		url:"bdd_handler",
+		data:{"function":"del", "type":"2", "id":id_task},
+		success: function(data){
+			$(".tache[id$="+id_task+"]").remove();
+		}
+	});
+}
+
+function validate_task(id_task)
+{
+	$.ajax({
+		type:"post",
+		url:"bdd_handler",
+		data:{"function":"update", "table":"taches","column":"finit", "value":"1", "id":id_task},
+		success: function(data){
+			console.log("terminé");
+		}
+	});
 }

@@ -15,7 +15,7 @@
 
 .tache
 {
-	width:10em;
+	width:13em;
 	background:#e8d8b9;
 
 	display:flex;
@@ -33,7 +33,7 @@
         display:flex;
         justify-content:space-between;
         align-self:flex-start;
-        height:fit-content;
+        height:2em;
         width:90%;
         padding:3px;
 }
@@ -41,13 +41,20 @@
 .top-tache p
 {
         margin:0px;
+	align-self:center;
+}
+
+.top-tache u
+{
+	align-self:center;
 }
 
 #task_name_input
 {
-	width:60%;
+	width:40%;
 	margin-top:0.3em;
 	margin-bottom:0.3em;
+	align-self:center;
 }
 
 #task-infos div
@@ -67,7 +74,14 @@
 	justify-content:space-between;
 }
 
-#states0
+#task-infos div img
 {
-	background:red;
+	border-radius:50%;
+	width:30px;
+	height:30px;
+}
+
+#task-infos
+{
+	width:100%;
 }
