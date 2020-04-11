@@ -203,7 +203,7 @@ function show_task_infos(id_task, task)
                         data = JSON.parse(data);
 			if(data["deadline"] == null)
 			{
-				data["deadline"] = "Set alarm";
+				data["deadline"] = "En cour";
 			}
 
                         infos = "<div id='task-infos'><span><p id='deadline'>"+data["deadline"]+"</p><div ><img id='valider' src='terminer.png'/></div><div ><img id='turnoff' src='annuler.png'/></div></span></div>";
@@ -217,16 +217,6 @@ function show_task_infos(id_task, task)
 			$('#valider').click(function(e){
 				validate_task(id_task);
 			});
-
-			$("#deadline").click(function(e){
-				task_id = id_task;
-				$("#deadline").remove();
-				$($("#task-infos").children()[0]).prepend("<aside id='div-deadline'><input type='date' id='task-deadline'/><button id='deadline-input'>Sauvegarder</button></aside>");
-
-				$("#deadline-input").click(function(e){
-					console.log($("#task-deadline").val());
-				});
-			})
                 }
         });
 }
