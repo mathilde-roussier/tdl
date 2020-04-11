@@ -41,8 +41,7 @@ class bdd
 	public function add_task($id_createur, $id_liste, $titre)
 	{
 		$query = "SELECT  taches.id as id_tache,
-                utilisateurs.nom as nom_createur FROM taches 
-                INNER JOIN utilisateurs ON taches.id_createur = utilisateurs.id 
+                taches.date_creation as creation_date FROM taches 
                 WHERE taches.id_createur=".$id_createur." AND 
                 taches.id_liste=".$id_liste."
                 AND taches.nom='".$titre."'";
@@ -53,7 +52,7 @@ class bdd
 						   VALUES  (NULL, '".$id_createur."','".$id_liste."', CURRENT_DATE(), 0, CURRENT_TIMESTAMP, '".$titre."')" ) )
 			{
 				$data = $this->connexion->query($query)->fetch();
-				echo json_encode(["nom_tache"=>$titre, "id_liste"=>$id_liste, "id_createur"=>$id_createur, "createur"=>$data["nom_createur"], "id_tache"=>$data["id_tache"]]);
+				echo json_encode(["nom_tache"=>$titre, "id_liste"=>$id_liste, "date_creation"=>$data['creation_date'], "id_tache"=>$data["id_tache"]]);
 			}
 		}
 	}

@@ -29,7 +29,7 @@ function get_tasks(id_liste, id_tableau, id_createur)
 function display_task(task)
 {
 	tache = "<div class='tache' id='"+task["id_tache"]+"'><span class='top-tache'><p class='task_title'>"+
-	task["nom_tache"]+"</p><u>"+task["date_creation"]+"</span></div>";
+	task["nom_tache"]+"</p><u>"+task["date_creation"]+"</u></span></div>";
 	$(".liste[id$="+task["id_liste"]+"]").prepend(tache);
 }
 
@@ -175,7 +175,6 @@ function change_task_title(title, task_id)
 
 function add_task(nom,id_liste)
 {
-        console.log(nom,id_liste);
         $.ajax({
                 url:'bdd_handler.php',
                 type:'post',
@@ -183,6 +182,7 @@ function add_task(nom,id_liste)
                        'titre':nom},
                 success:function(data)
                 {
+			console.log(data);
                         data = JSON.parse(data);
                         display_task(data);
                 }
