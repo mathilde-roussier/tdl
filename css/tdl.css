@@ -76,10 +76,24 @@ header{
     width: 100%;
 }
 
-.tableau_actuel .liste, .liste_tableaux .tableau{
+.liste{
+    display: flex;
+    flex-direction: column;
+    width: 15%;
+}
+
+.tableau{
+    width:15%;
+}
+
+.titre_liste, .tableau{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
+    align-items: center;
     border:1px solid black;
-    width: 15%;
+}
+
+.suppr_liste, .suppr_tab {
+    cursor: pointer;
 }

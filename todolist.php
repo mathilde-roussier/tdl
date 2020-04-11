@@ -33,14 +33,15 @@ if (!isset($_SESSION['id'])) {
                 <input id='addnewtableau' placeholder='Ajouter un tableau' type='text'>
                 <button id='addtableau'>Ajouter un tableau</button>
             </div>
+            <div class="tableaux">
+
+            </div>
         </section>
 
         <section class="tableau_actuel">
             <div class='newliste'>
                 <input id='addnewliste' placeholder='Ajouter une liste' type='text'>
                 <button id='addliste'>Ajouter une liste</button>
-            </div>
-            <div class="taches">
             </div>
         </section>
 

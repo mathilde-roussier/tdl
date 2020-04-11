@@ -72,13 +72,18 @@ function get_tableau() {
                 'display': 'block',
             })
 
+            $('.tableau').remove();
+
             var tableau = JSON.parse(datatype);
-            console.log(tableau);
 
             for (var i = 0; i < tableau.length; i++) {
-                var tab = '<div class="tableau" id=' + tableau[i]["id"] + '><p class="tab">' + tableau[i]["nom"] + '</p></div>';
+                var tab = '<div class="tableau" id=' + tableau[i]["id"] + '><p class="tab">' + tableau[i]["nom"] + '</p><span title="supprimer le tableau" class="suppr_tab">X</span></div>';
                 $('.liste_tableaux').append(tab);
             }
+
+            $('.tab').css({
+                'cursor': 'pointer',
+            })
 
             $('.tab').click(function () {
                 $('.tableau_actuel').show();
@@ -99,8 +104,25 @@ function get_tableau() {
             })
 
             back_tab();
+
+            del_tab();
         }
     });
+
+}
+
+/* supprimer un tableau */
+function del_tab() {
+    $('.suppr_tab').click(function () {
+        var id_tableau = $(this).parent().attr('id');
+        $.ajax({
+            method: "POST",
+            url: "bdd_handler.php",
+            data: { 'function': 'del', 'id': id_tableau, 'type': '3' },
+            datatype: "json",
+        })
+        get_tableau();
+    })
 
 }
 
@@ -162,9 +184,9 @@ function get_liste() {
             var liste = JSON.parse(datatype);
 
             for (var i = 0; i < liste.length; i++) {
-                var list = '<div class="liste" id=' + liste[i]["id"] + '><textarea id=nom' + liste[i]["id"] + '>' + liste[i]["nom"] + '</textarea><span class="suppr">Del</span></div>';
+                var list = '<div class="liste" id=' + liste[i]["id"] + '><div class="titre_liste"><input id=nom' + liste[i]["id"] + ' name="nom_liste" type="text" value="'+liste[i]["nom"]+'"><span title="supprimer la liste" class="suppr_liste">X</span></div></div>';
                 $('.tableau_actuel').append(list);
-                $('textarea').css({
+                $('input[name=nom_liste]').css({
                     'border': 'none',
                     'resize': 'none',
                     'cursor': 'pointer',
@@ -172,23 +194,25 @@ function get_liste() {
                 });
             }
 
-            $('textarea').focus(function () {
+            $('input[name=nom_liste]').focus(function () {
                 $(this).css({
                     'border': '1px solid black',
                     'background': 'silver',
+                    'cursor': 'auto',
                 });
             })
 
-            $('textarea').focusout(function () {
+            $('input[name=nom_liste]').focusout(function () {
                 $(this).css({
                     'border': 'none',
                     'background': 'none',
+                    'cursor': 'pointer',
                 });
             })
 
-            $('textarea').keyup(function () {
+            $('input[name=nom_liste]').keyup(function () {
                 var value = $(this).val();
-                var id = $(this).parent().attr('id');
+                var id = $(this).parent().parent().attr('id');
                 modif_nomliste(id, value);
             })
 
@@ -202,7 +226,7 @@ function get_liste() {
 /* Supprimer une liste */
 
 function del_liste() {
-    $('.suppr').click(function () {
+    $('.suppr_liste').click(function () {
         var id_liste = $(this).parent().attr('id');
         $.ajax({
             method: "POST",
