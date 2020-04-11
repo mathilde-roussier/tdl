@@ -49,7 +49,7 @@ class bdd
 		if(empty($test))
 		{
 			if($this->connexion->query("INSERT INTO `taches`(`id`, `id_createur`, `id_liste`, `date_creation`, `finit`, `deadline`, `nom`)
-						   VALUES  (NULL, '".$id_createur."','".$id_liste."', CURRENT_DATE(), 0, CURRENT_TIMESTAMP, '".$titre."')" ) )
+						   VALUES  (NULL, '".$id_createur."','".$id_liste."', CURRENT_DATE(), 0, NULL, '".$titre."')" ) )
 			{
 				$data = $this->connexion->query($query)->fetch();
 				echo json_encode(["nom_tache"=>$titre, "id_liste"=>$id_liste, "date_creation"=>$data['creation_date'], "id_tache"=>$data["id_tache"]]);
@@ -135,7 +135,7 @@ class bdd
 
 	public function get_finished_taches($id_tableau)
 	{
-		$query = "SELECT taches.nom as nom, taches.deadline as deadline FROM taches  INNER JOIN listes ON taches.id_liste = listes.id WHERE listes.id_tableau=".$id_tableau." AND finit=1";
+		$query = "SELECT taches.nom as nom, taches.deadline as deadline FROM taches INNER JOIN listes ON taches.id_liste = listes.id WHERE listes.id_tableau=".$id_tableau." AND finit=1";
 		echo json_encode($this->connexion->query($query)->fetchAll(PDO::FETCH_ASSOC));
 	}
 }

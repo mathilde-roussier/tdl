@@ -190,6 +190,7 @@ function add_task(nom,id_liste)
         });
 }
 
+
 function show_task_infos(id_task, task)
 {
         $.ajax({
@@ -198,20 +199,34 @@ function show_task_infos(id_task, task)
                 data:{"function":'get_tache',
                       'id':id_task},
                 success: function(data){
+			console.log(data);
                         data = JSON.parse(data);
+			if(data["deadline"] == null)
+			{
+				data["deadline"] = "Set alarm";
+			}
+
                         infos = "<div id='task-infos'><span><p id='deadline'>"+data["deadline"]+"</p><div ><img id='valider' src='terminer.png'/></div><div ><img id='turnoff' src='annuler.png'/></div></span></div>";
                         task.append(infos);
 			task.css('height','70px');
 
 			$('#turnoff').click(function(e){
-				task_id = $(this).parent().parent().parent().parent().attr("id");
-				delete_task(task_id);
+				delete_task(id_task);
 			});
 
 			$('#valider').click(function(e){
-				task_id = $(this).parent().parent().parent().parent().attr("id");
-				validate_task(task_id);
+				validate_task(id_task);
 			});
+
+			$("#deadline").click(function(e){
+				task_id = id_task;
+				$("#deadline").remove();
+				$($("#task-infos").children()[0]).prepend("<aside id='div-deadline'><input type='date' id='task-deadline'/><button id='deadline-input'>Sauvegarder</button></aside>");
+
+				$("#deadline-input").click(function(e){
+					console.log($("#task-deadline").val());
+				});
+			})
                 }
         });
 }
@@ -247,21 +262,20 @@ function get_finished_tasks(id_tableau)
 
 function validate_task(id_task)
 {
-	var task;
 	$.ajax({
 		type:"post",
 		url:"bdd_handler",
 		data:{"function":"update", "table":"taches","column":"finit", "value":"1", "id":id_task},
 		success: function(data){
-			task = $(".tache[id$="+id_task+"]");
 			$(".tache[id$="+id_task+"]").remove();
-			task.attr('class', "tache_finit");
 		}
 	});
+	cur = new Date()
+	date = cur.getFullYear() + "-" +  cur.getMonth() + "-" +cur.getDate() ;
 	$.ajax({
 		type:"post",
 		url:"bdd_handler",
-		data:{"function":"update", "table":"taches","column":"deadline", "value":"CURRENT_DATE()", "id":id_task}
+		data:{"function":"update", "table":"taches","column":"deadline", "value":date, "id":id_task},
 	});
 	$.ajax({
 		type:"post",
@@ -269,7 +283,6 @@ function validate_task(id_task)
 		data:{"function":"get_tache", "id":id_task},
 		success:function(data){
 			data = JSON.parse(data);
-			console.log(data);
 			$("#liste_tachefinit").prepend("<div class='tache_finit'>"+data["nom"]+" finit le:"+data["deadline"]+"</div>");	
 		}
 	});

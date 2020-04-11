@@ -85,3 +85,16 @@
 {
 	width:100%;
 }
+
+#task-deadline
+{
+	height:2em;
+}
+
+#div-deadline
+{
+	display:flex !important;
+	flex-direction:column !important;
+	width:100%;
+	height:3em;
+}
