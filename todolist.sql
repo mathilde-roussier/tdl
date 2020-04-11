@@ -2,10 +2,10 @@
 -- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Apr 07, 2020 at 11:56 AM
--- Server version: 5.7.26
--- PHP Version: 7.2.18
+-- Hôte : 127.0.0.1:3306
+-- Généré le :  sam. 11 avr. 2020 à 13:54
+-- Version du serveur :  5.7.26
+-- Version de PHP :  7.2.18
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `todolist`
+-- Base de données :  `todolist`
 --
 CREATE DATABASE IF NOT EXISTS `todolist` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `todolist`;
@@ -27,47 +27,37 @@ USE `todolist`;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `listes`
+-- Structure de la table `listes`
 --
 
 DROP TABLE IF EXISTS `listes`;
 CREATE TABLE IF NOT EXISTS `listes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_liste` int(11) NOT NULL AUTO_INCREMENT,
   `id_createur` int(11) NOT NULL,
   `id_tableau` int(11) NOT NULL,
   `nom` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `listes`
---
-
-INSERT INTO `listes` (`id`, `id_createur`, `id_tableau`, `nom`) VALUES
-(1, 1, 1, 'admin'),
-(2, 1, 1, 'totest'),
-(4, 1, 1, 'toewest'),
-(5, 1, 1, 'toewast'),
-(6, 1, 1, 'toewajt');
+  PRIMARY KEY (`id_liste`),
+  KEY `id_tableau` (`id_tableau`)
+) ENGINE=InnoDB AUTO_INCREMENT=200 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tableaux`
+-- Structure de la table `tableaux`
 --
 
 DROP TABLE IF EXISTS `tableaux`;
 CREATE TABLE IF NOT EXISTS `tableaux` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_tableau` int(11) NOT NULL AUTO_INCREMENT,
   `id_createur` int(11) NOT NULL,
   `nom` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id_tableau`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `taches`
+-- Structure de la table `taches`
 --
 
 DROP TABLE IF EXISTS `taches`;
@@ -79,22 +69,14 @@ CREATE TABLE IF NOT EXISTS `taches` (
   `finit` tinyint(1) NOT NULL,
   `deadline` date NOT NULL,
   `nom` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `taches`
---
-
-INSERT INTO `taches` (`id`, `id_createur`, `id_liste`, `date_creation`, `finit`, `deadline`, `nom`) VALUES
-(1, 1, 1, '2020-04-07', 0, '2020-04-07', 'test'),
-(2, 1, 1, '2020-04-07', 0, '2020-04-07', 'task1'),
-(4, 1, 1, '2020-04-07', 0, '2020-04-07', 'task3');
+  PRIMARY KEY (`id`),
+  KEY `id_liste` (`id_liste`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `utilisateurs`
+-- Structure de la table `utilisateurs`
 --
 
 DROP TABLE IF EXISTS `utilisateurs`;
@@ -103,7 +85,31 @@ CREATE TABLE IF NOT EXISTS `utilisateurs` (
   `nom` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Déchargement des données de la table `utilisateurs`
+--
+
+INSERT INTO `utilisateurs` (`id`, `nom`, `password`) VALUES
+(1, 'test', '$2y$12$XHqJnuT8blVZroa14nUgBu8VJORXBvmWpf1Zn/AwFK/jGZpcldugS'),
+(2, 'moi', '$2y$12$.6RgP2CfrJ068dx5RGZThO2domZoZei0blbwrI2.HMUWKNknvP9Ei');
+
+--
+-- Contraintes pour les tables déchargées
+--
+
+--
+-- Contraintes pour la table `listes`
+--
+ALTER TABLE `listes`
+  ADD CONSTRAINT `listes_suppr_tab` FOREIGN KEY (`id_tableau`) REFERENCES `tableaux` (`id_tableau`) ON DELETE CASCADE;
+
+--
+-- Contraintes pour la table `taches`
+--
+ALTER TABLE `taches`
+  ADD CONSTRAINT `taches_suppr_liste_tab` FOREIGN KEY (`id_liste`) REFERENCES `listes` (`id_liste`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
