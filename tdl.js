@@ -192,8 +192,8 @@ function get_liste() {
 
             $('input[name=nom_liste]').focus(function () {
                 $(this).css({
-                    'border': '1px solid black',
-                    'background': 'silver',
+                    'border': '0px solid black',
+                    'background': 'white',
                     'cursor': 'auto',
                 });
             })
@@ -291,7 +291,7 @@ $(document).click(function(e)
                     nom =  ($("#task_name_input").val().length > 0) ? $("#task_name_input").val() :task_nom;  
                     
                     $("#task_name_input").parent().prepend("<p class='task_title'>"+nom+"</p>");
-                    id_task = $("#task_name_input").parent().attr("id");
+                    id_task = $("#task_name_input").parent().parent().attr("id");
 
                     $("#task_name_input").remove();
                     
@@ -324,7 +324,7 @@ $(document).click(function(e)
 		input = $("<input type='text' placeholder='"+task_nom+"' id='task_name_input'/>");
 		tache.prepend(input);
 		
-		id_task = input.parent().attr("id");
+		id_task = $("#task_name_input").parent().parent().attr("id");
 		input.focus();
 
 		on_title = true;
@@ -335,10 +335,8 @@ $(document).click(function(e)
 				nom =  ($(this).val().length > 0) ? $(this).val() :task_nom;  
 				
 				$(this).parent().prepend("<p class='task_title'>"+nom+"</p>");
-				id_task = $("#task_name_input").parent().attr("id");
 
 				$(this).remove();
-				
 				change_task_title(nom,id_task);
 				on_title = false;
 			}
@@ -402,10 +400,12 @@ $(document).click(function(e)
 
 function change_task_title(title, task_id)
 {
+console.log(title, task_id);
 	$.ajax({
 		type:"post",
 		url:"bdd_handler.php",
 		data:{	"function":"update",
+			"type":"2",
 			"table":"taches",
 			"column":"nom",
 			"value":title,
@@ -441,12 +441,12 @@ function show_task_infos(id_task, task)
                         data = JSON.parse(data);
 			if(data["deadline"] == null)
 			{
-				data["deadline"] = "En cour";
+				data["deadline"] = "En cours";
 			}
 
                         infos = "<div id='task-infos'><span><p id='deadline'>"+data["deadline"]+"</p><div ><img id='valider' src='terminer.png'/></div><div ><img id='turnoff' src='annuler.png'/></div></span></div>";
                         task.append(infos);
-			task.css('height','70px');
+			task.css('height','80px');
 
 			$('#turnoff').click(function(e){
 				delete_task(id_task);
