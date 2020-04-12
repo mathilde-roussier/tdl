@@ -29,7 +29,7 @@ class bdd
 		$test = $this->connexion->query($query)->fetch();
 		if (empty($test)) {
 			if ($this->connexion->query("INSERT INTO `listes` (`id_liste`, `id_createur`, `id_tableau`, `nom`) VALUES (NULL, '" . $id_createur . "', '" . $id_tableau . "', '" . $titre . "' )")) {
-				$id = $this->connexion->query($query)->fetch()["id"];
+				$id = $this->connexion->query($query)->fetch()["id_liste"];
 				echo json_encode(["titre" => $titre, "id_tableau" => $id_tableau, "id_createur" => $id_createur, "id" => $id]);
 			}
 		}
@@ -38,8 +38,7 @@ class bdd
 	public function add_task($id_createur, $id_liste, $titre)
 	{
 		$query = "SELECT  taches.id as id_tache,
-                utilisateurs.nom as nom_createur FROM taches 
-                INNER JOIN utilisateurs ON taches.id_createur = utilisateurs.id 
+                taches.date_creation as creation_date FROM taches 
                 WHERE taches.id_createur=".$id_createur." AND 
                 taches.id_liste=".$id_liste."
                 AND taches.nom='".$titre."'";
@@ -47,10 +46,10 @@ class bdd
 		if(empty($test))
 		{
 			if($this->connexion->query("INSERT INTO `taches`(`id`, `id_createur`, `id_liste`, `date_creation`, `finit`, `deadline`, `nom`)
-						   VALUES  (NULL, '".$id_createur."','".$id_liste."', CURRENT_DATE(), 0, CURRENT_TIMESTAMP, '".$titre."')" ) )
+						   VALUES  (NULL, '".$id_createur."','".$id_liste."', CURRENT_DATE(), 0, NULL, '".$titre."')" ) )
 			{
-				$data = $this->connexion->query($query)->fetch();
-				echo json_encode(["nom_tache"=>$titre, "id_liste"=>$id_liste, "id_createur"=>$id_createur, "createur"=>$data["nom_createur"], "id_tache"=>$data["id_tache"]]);
+				$data = $this->connexion->query($query)->fetch(PDO::FETCH_ASSOC);
+				echo json_encode(["nom_tache"=>$titre, "id_liste"=>$id_liste, "date_creation"=>$data['creation_date'], "id_tache"=>$data["id_tache"]]);
 			}
 		}
 	}
@@ -116,7 +115,7 @@ class bdd
 		INNER JOIN listes ON taches.id_liste = listes.id_liste
 		INNER JOIN tableaux ON listes.id_tableau = tableaux.id_tableau 
 		LEFT JOIN utilisateurs ON taches.id_createur = utilisateurs.id
-		WHERE taches.id_createur=".$id_createur." AND taches.id_liste=".$id_liste." AND  listes.id_tableau=".$id_tableau;
+		WHERE taches.id_createur=".$id_createur." AND taches.id_liste=".$id_liste." AND  listes.id_tableau=".$id_tableau." AND taches.finit!=1";
 		$res = $this->connexion->query($query)->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode($res);
 		return $res;
@@ -127,4 +126,10 @@ class bdd
                 $query = "SELECT * FROM taches WHERE id = ".$id;
                 echo json_encode($this->connexion->query($query)->fetch(PDO::FETCH_ASSOC));
         }
+
+	public function get_finished_taches($id_tableau)
+	{
+		$query = "SELECT taches.nom as nom, taches.deadline as deadline FROM taches INNER JOIN listes ON taches.id_liste = listes.id_liste WHERE listes.id_tableau=".$id_tableau." AND finit=1";
+		echo json_encode($this->connexion->query($query)->fetchAll(PDO::FETCH_ASSOC));
+	}
 }

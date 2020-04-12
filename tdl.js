@@ -75,7 +75,6 @@ function get_tableau() {
             $('.tableau').remove();
 
             var tableau = JSON.parse(datatype);
-            console.log(tableau);
 
             for (var i = 0; i < tableau.length; i++) {
                 var tab = '<div class="tableau" id=' + tableau[i]["id_tableau"] + '><p class="tab">' + tableau[i]["nom"] + '</p><span title="supprimer le tableau" class="suppr_tab">X</span></div>';
@@ -91,8 +90,7 @@ function get_tableau() {
                 $('.liste_tableaux').hide();
                 var id_tab = $(this).parent().attr('id');
                 localStorage.setItem('id_tableau', id_tab);
-
-                console.log(localStorage);
+		$(".tableau_actuel").attr("id", id_tab);
 
                 $(".nom_tableau_actuel").append($(this).html());
 
@@ -101,7 +99,7 @@ function get_tableau() {
                 $('.nom_tableau_actuel').show();
 
                 add_liste();
-
+		get_finished_tasks();
                 get_liste();
 
             })
@@ -118,7 +116,6 @@ function get_tableau() {
 function del_tab() {
     $('.suppr_tab').click(function () {
         var id_tableau = $(this).parent().attr('id');
-        console.log(id_tableau);
         $.ajax({
             method: "POST",
             url: "bdd_handler.php",
@@ -150,9 +147,7 @@ function add_liste() {
                 url: "bdd_handler.php",
                 data: { 'function': 'add_list', 'id_tableau': localStorage.getItem('id_tableau'), 'titre': titre },
                 datatype: "json",
-                success:function(data){
-                    console.log(data);
-                }
+		success:function(data) { get_liste(); }
             })
 
         }
@@ -160,7 +155,6 @@ function add_liste() {
             'display': 'none',
         })
         $('#addnewliste').val('');
-        get_liste();
     })
 
 }
@@ -186,12 +180,10 @@ function get_liste() {
         datatype: "json",
         success: function (datatype) {
 
-            console.log(datatype);
 
             $('.liste').remove();
 
             var liste = JSON.parse(datatype);
-
             for (var i = 0; i < liste.length; i++) {
                 var list = '<div class="liste" id=' + liste[i]["id_liste"] + '><div class="titre_liste"><input id=nom' + liste[i]["id_liste"] + ' name="nom_liste" type="text" value="'+liste[i]["nom"]+'"><span title="supprimer la liste" class="suppr_liste">X</span></div></div>';
                 $('.tableau_actuel').append(list);
@@ -232,14 +224,13 @@ function get_liste() {
 function del_liste() {
     $('.suppr_liste').click(function () {
         var id_liste = $(this).parent().parent().attr('id');
-        console.log(id_liste);
         $.ajax({
             method: "POST",
             url: "bdd_handler.php",
             data: { 'function': 'del', 'id': id_liste, 'type': '1' },
             datatype: "json",
+	    success:function(data){get_liste();}
         })
-        get_liste();
     })
 
 }
@@ -255,6 +246,7 @@ function back_tab() {
         $('.nom_tableau_actuel').html("");
     })
 }
+
 
 function get_tasks(id_liste, id_tableau, id_createur)
 {
@@ -272,8 +264,7 @@ function get_tasks(id_liste, id_tableau, id_createur)
 				{
 					display_task(data[i]);
 				}
-					
-				$(".liste[id$="+id_liste+"]").append("<button class='add_tache'>+</button>");
+				$(".liste[id$="+id_liste+"] .titre_liste").after("<button class='add_tache'>+</button>");
 			}
 		});
 }
@@ -281,8 +272,8 @@ function get_tasks(id_liste, id_tableau, id_createur)
 function display_task(task)
 {
 	tache = "<div class='tache' id='"+task["id_tache"]+"'><span class='top-tache'><p class='task_title'>"+
-	task["nom_tache"]+"</p><u>"+task["date_creation"]+"</span></div>";
-	$(".liste[id$="+task["id_liste"]+"]").prepend(tache);
+	task["nom_tache"]+"</p><u>"+task["date_creation"]+"</u></span></div>";
+	$(".liste[id$="+task["id_liste"]+"]").append(tache);
 }
 
 var on_title = false;
@@ -315,12 +306,11 @@ $(document).click(function(e)
                     nom =  ($("#new_task_name").val().length > 0) ? $("#new_task_name").val() :"";  
                     id_liste = $("#new_task_name").parent().attr("id");
                     $("#new_task_name").remove();
-                   
                     if(nom != "")
                     {
                         add_task(nom,id_liste);
                     }
-                    $(".liste[id$="+id_liste+"]").append("<button class='add_tache'>+</button>");
+                    $(".liste[id$="+id_liste+"] .titre_liste").after("<button class='add_tache'>+</button>");
                     on_create = false;
                 }
 	}
@@ -360,7 +350,7 @@ $(document).click(function(e)
             id_liste = liste.attr("id");
             
             create_input = $("<input type='text' id='new_task_name' placeholder='Nouvelle tache'/>"); 
-            liste.append(create_input);
+            $(".liste[id$="+id_liste+"] .titre_liste").after(create_input);
             target.remove();
             create_input.focus();
             on_create = true;
@@ -369,8 +359,7 @@ $(document).click(function(e)
                 if(e.keyCode == 13)
                 {
                     nom =  ($(this).val().length > 0) ? $(this).val() :"";  
-                    $(".liste[id$="+id_liste+"]").append("<button class='add_tache'>+</button>");
-
+                    $(".liste[id$="+id_liste+"] .titre_liste").after("<button class='add_tache'>+</button>");
                     if(nom != "")
                     {
                             add_task(nom,id_liste);
@@ -417,7 +406,6 @@ function change_task_title(title, task_id)
 		type:"post",
 		url:"bdd_handler.php",
 		data:{	"function":"update",
-			"type":'2',
 			"table":"taches",
 			"column":"nom",
 			"value":title,
@@ -428,7 +416,6 @@ function change_task_title(title, task_id)
 
 function add_task(nom,id_liste)
 {
-        console.log(nom,id_liste);
         $.ajax({
                 url:'bdd_handler.php',
                 type:'post',
@@ -442,6 +429,7 @@ function add_task(nom,id_liste)
         });
 }
 
+
 function show_task_infos(id_task, task)
 {
         $.ajax({
@@ -451,18 +439,21 @@ function show_task_infos(id_task, task)
                       'id':id_task},
                 success: function(data){
                         data = JSON.parse(data);
+			if(data["deadline"] == null)
+			{
+				data["deadline"] = "En cour";
+			}
+
                         infos = "<div id='task-infos'><span><p id='deadline'>"+data["deadline"]+"</p><div ><img id='valider' src='terminer.png'/></div><div ><img id='turnoff' src='annuler.png'/></div></span></div>";
                         task.append(infos);
 			task.css('height','70px');
 
 			$('#turnoff').click(function(e){
-				task_id = $(this).parent().parent().parent().parent().attr("id");
-				delete_task(task_id);
+				delete_task(id_task);
 			});
 
 			$('#valider').click(function(e){
-				task_id = $(this).parent().parent().parent().parent().attr("id");
-				validate_task(task_id);
+				validate_task(id_task);
 			});
                 }
         });
@@ -480,14 +471,47 @@ function delete_task(id_task)
 	});
 }
 
+function get_finished_tasks()
+{
+	$.ajax({
+		url:"bdd_handler.php",
+		type:"post",
+		data:{"function":"get_finished_taches", "id_tableau":$(".tableau_actuel").attr("id")},
+		success:function(data){
+			data = JSON.parse(data);
+			$("#liste_tachefinit").children("div").remove();
+			for(i=0;i<data.length;i++)
+			{
+				$("#liste_tachefinit").append("<div class='tache_finit'>"+data[i]["nom"]+" finit le:"+data[i]["deadline"]+"</div>");	
+			}
+		}
+	});
+}
+
 function validate_task(id_task)
 {
 	$.ajax({
 		type:"post",
 		url:"bdd_handler",
-		data:{"function":"update",'type':'2', "table":"taches","column":"finit", "value":"1", "id":id_task},
+		data:{"function":"update","type":"2", "table":"taches","column":"finit", "value":"1", "id":id_task},
 		success: function(data){
-			console.log("terminé");
+			$(".tache[id$="+id_task+"]").remove();
+		}
+	});
+	cur = new Date()
+	date = cur.getFullYear() + "-" +  cur.getMonth() + "-" +cur.getDate() ;
+	$.ajax({
+		type:"post",
+		url:"bdd_handler",
+		data:{"function":"update","type":"2", "table":"taches","column":"deadline", "value":date, "id":id_task},
+	});
+	$.ajax({
+		type:"post",
+		url:"bdd_handler.php",
+		data:{"function":"get_tache", "id":id_task},
+		success:function(data){
+			data = JSON.parse(data);
+			$("#liste_tachefinit").append("<div class='tache_finit'>"+data["nom"]+" finit le:"+data["deadline"]+"</div>");	
 		}
 	});
 }

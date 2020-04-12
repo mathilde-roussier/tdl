@@ -44,8 +44,11 @@ if (!isset($_SESSION['id'])) {
                 <input id='addnewliste' placeholder='Ajouter une liste' type='text'>
                 <button id='addliste'>Ajouter une liste</button>
             </div>
+	    <div  id='liste_tachefinit'>
+	    	<p>Taches Finies</p>
+	    </div>
         </section>
-
+        </div>
     </main>
 
 </body>

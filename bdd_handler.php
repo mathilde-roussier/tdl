@@ -17,20 +17,20 @@ if(isset($_POST["function"])||isset($_GET["function"]))
 		case "add_list":
 			$id_createur = $_SESSION["id"];
 			$id_tableau = $_POST["id_tableau"];
-			$titre = htmlspecialchars($_POST["titre"]);
+			$titre = htmlspecialchars(addslashes($_POST["titre"]));
 			$bdd->add_list($id_createur, $id_tableau, $titre);
 		break;
 		
 		case "add_task":
 			$id_createur = $_SESSION["id"];
                         $id_liste = $_POST["id_liste"];
-			$titre = htmlspecialchars($_POST["titre"]);
+			$titre = htmlspecialchars(addslashes($_POST["titre"]));
 			$bdd->add_task($id_createur, $id_liste, $titre);
 		break;
 		
 		case "add_tableau":
 			$id_createur = $_SESSION["id"];
-			$titre = htmlspecialchars($_POST["titre"]);
+			$titre = htmlspecialchars(addslashes($_POST["titre"]));
 			$bdd->add_tableau($id_createur, $titre);
 		break;
 
@@ -42,7 +42,7 @@ if(isset($_POST["function"])||isset($_GET["function"]))
 			$id = $_POST["id"];
 			$table = $_POST["table"];
 			$column = $_POST["column"];
-			$value = $_POST["value"];
+			$value = htmlspecialchars($_POST["value"]);
 			$type = $_POST["type"];
 			$bdd->update($type, $id,$table,$column,$value);
 		break;
@@ -69,6 +69,11 @@ if(isset($_POST["function"])||isset($_GET["function"]))
                         $id = $_POST["id"];
                         $bdd->get_tache($id);
                 break;
+
+		case "get_finished_taches":
+			$id_tableau = $_POST["id_tableau"];
+			$bdd->get_finished_taches($id_tableau);
+		break;
 
 		default:
 			echo "error function ".$function." not found!";
