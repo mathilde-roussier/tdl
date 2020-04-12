@@ -201,8 +201,9 @@ function get_liste() {
             $('input[name=nom_liste]').focusout(function () {
                 $(this).css({
                     'border': 'none',
-                    'background': 'none',
+                    'background': '#E8D8B9',
                     'cursor': 'pointer',
+		    'border-radius':'5px'
                 });
             })
 

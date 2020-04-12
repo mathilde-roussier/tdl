@@ -15,17 +15,24 @@
 
 .tache
 {
-	width:13em;
-	background:#e8d8b9;
+	width:99%;
+	background:#ffeac1;
 
 	display:flex;
+	flex-direction:column;
 	justify-content:space-around;
 	align-items:center;
 
+	font-size:1.2em;
 	margin:0.3em;
-	border:2px solid white;
-
 	cursor:pointer;
+	border-radius:3px;
+}
+
+.nom_liste
+{
+	font-size:1.2em;
+	
 }
 
 .top-tache
@@ -55,6 +62,11 @@
 	margin-top:0.3em;
 	margin-bottom:0.3em;
 	align-self:center;
+}
+
+#task_name_input:focus
+{
+	outline:none;
 }
 
 #task-infos div
@@ -97,4 +109,44 @@
 	flex-direction:column !important;
 	width:100%;
 	height:3em;
+}
+
+.add_tache
+{
+	width:99%;
+	border:0px;
+	font-size:1.2em;
+	background:#f0f0f0;
+	margin-top:5px;
+	transition:all 0.2s ease;
+}
+
+.add_tache:hover
+{
+	cursor:pointer;
+	color:white;
+	background:#484848;
+}
+
+#new_task_name
+{
+	width:99%;
+	font-size:1.2em;
+	color:black;
+	border:0px;
+	margin-top:5px;
+}
+#new_task_name:focus
+{
+	outline:none;
+}
+
+#task_name_input
+{
+	border-radius:3px;
+	border:0px;
+}
+#task_name_input:focus
+{
+	outline:none;
 }

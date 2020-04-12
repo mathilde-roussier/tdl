@@ -31,7 +31,7 @@ if (!isset($_SESSION['id'])) {
     <main>
         <section class="liste_tableaux">
             <div class='newtableau'>
-                <input id='addnewtableau' placeholder='Ajouter un tableau' type='text'>
+                <input id='addnewtableau' placeholder='Nom tableau' type='text'>
                 <button id='addtableau'>Ajouter un tableau</button>
             </div>
             <div class="tableaux">
