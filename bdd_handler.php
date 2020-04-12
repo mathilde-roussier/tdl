@@ -42,7 +42,7 @@ if(isset($_POST["function"])||isset($_GET["function"]))
 			$id = $_POST["id"];
 			$table = $_POST["table"];
 			$column = $_POST["column"];
-			$value = htmlspecialchars($_POST["value"]);
+			$value = htmlspecialchars(addslashes($_POST["value"]));
 			$type = $_POST["type"];
 			$bdd->update($type, $id,$table,$column,$value);
 		break;
