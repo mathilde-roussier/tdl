@@ -499,8 +499,8 @@ function validate_task(id_task)
 			$(".tache[id$="+id_task+"]").remove();
 		}
 	});
-	cur = new Date()
-	date = cur.getFullYear() + "-" +  cur.getMonth() + "-" +cur.getDate() ;
+    cur = new Date();
+    date = cur.getFullYear() + "-" +  (cur.getMonth()+1) + "-" +cur.getDate() ;
 	$.ajax({
 		type:"post",
 		url:"bdd_handler",
