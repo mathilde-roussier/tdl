@@ -505,14 +505,17 @@ function validate_task(id_task)
 		type:"post",
 		url:"bdd_handler",
 		data:{"function":"update","type":"2", "table":"taches","column":"deadline", "value":date, "id":id_task},
-	});
-	$.ajax({
-		type:"post",
-		url:"bdd_handler.php",
-		data:{"function":"get_tache", "id":id_task},
-		success:function(data){
-			data = JSON.parse(data);
-			$("#liste_tachefinit").append("<div class='tache_finit'>"+data["nom"]+" finit le:"+data["deadline"]+"</div>");	
+		success:function(data) {
+			
+			$.ajax({
+				type:"post",
+				url:"bdd_handler.php",
+				data:{"function":"get_tache", "id":id_task},
+				success:function(data){
+					data = JSON.parse(data);
+					$("#liste_tachefinit").append("<div class='tache_finit'>"+data["nom"]+" finit le:"+data["deadline"]+"</div>");	
+				}
+			});
 		}
 	});
 }
